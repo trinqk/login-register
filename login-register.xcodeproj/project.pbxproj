@@ -11,6 +11,7 @@
 		09005FEA2075C12300DEF86B /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09005FE92075C12300DEF86B /* ViewController.swift */; };
 		09005FEF2075C12500DEF86B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 09005FEE2075C12500DEF86B /* Assets.xcassets */; };
 		09005FF22075C12500DEF86B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 09005FF02075C12500DEF86B /* LaunchScreen.storyboard */; };
+		09C5437E2083491D00E3F922 /* RegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09C5437D2083491D00E3F922 /* RegisterViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -20,6 +21,7 @@
 		09005FEE2075C12500DEF86B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		09005FF12075C12500DEF86B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		09005FF32075C12500DEF86B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		09C5437D2083491D00E3F922 /* RegisterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,6 +56,7 @@
 			children = (
 				09005FE72075C12300DEF86B /* AppDelegate.swift */,
 				09005FE92075C12300DEF86B /* ViewController.swift */,
+				09C5437D2083491D00E3F922 /* RegisterViewController.swift */,
 				09005FEE2075C12500DEF86B /* Assets.xcassets */,
 				09005FF02075C12500DEF86B /* LaunchScreen.storyboard */,
 				09005FF32075C12500DEF86B /* Info.plist */,
@@ -131,6 +134,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				09C5437E2083491D00E3F922 /* RegisterViewController.swift in Sources */,
 				09005FEA2075C12300DEF86B /* ViewController.swift in Sources */,
 				09005FE82075C12300DEF86B /* AppDelegate.swift in Sources */,
 			);

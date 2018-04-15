@@ -4,24 +4,22 @@ class ViewController: UIViewController {
     
     let blue = UIColor(red: 53, green: 152, blue: 220)
     
+    // MARK: - UI ELEMENTS
     var logoImage: UIImageView = {
         var imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 250, height: 250));
         imageView.image = UIImage(named:"winter")
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.alpha = 0
         return imageView
     }()
     
     lazy var loginButton: UIButton = {
         let button = UIButton(type: .system)
         button.backgroundColor = UIColor.white
-        button.alpha = 0
         button.setTitleColor(blue, for: .normal)
         button.setTitle("login", for: .normal)
-        button.titleLabel?.font = UIFont.init(name: "AvenirNext-Regular", size: 24)!
         button.layer.borderColor = blue.cgColor
         button.layer.borderWidth = 2.0
-        button.layer.cornerRadius = 65
+        button.layer.cornerRadius = 25
         button.clipsToBounds = true
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -30,122 +28,193 @@ class ViewController: UIViewController {
     lazy var registerButton: UIButton = {
         let button = UIButton(type: .system)
         button.backgroundColor = blue
-        button.alpha = 0
         button.setTitleColor(UIColor.white, for: .normal)
         button.setTitle("register", for: .normal)
-        button.titleLabel?.font = UIFont.init(name: "AvenirNext-Regular", size: 24)!
-        button.layer.cornerRadius = 65
+        button.layer.cornerRadius = 25
         button.clipsToBounds = true
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
     
-    var bottomPadding: CGFloat!
-    var topPadding: CGFloat!
+    lazy var closeButton: UIButton = {
+        let button = UIButton()
+        button.backgroundColor = blue
+        button.setImage(UIImage(named: "close"), for: .normal)
+        button.imageEdgeInsets = UIEdgeInsetsMake(10, 10, 10, 10)
+        button.layer.cornerRadius = 20
+        button.clipsToBounds = true
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
     
+    let emailTextField: UITextField = {
+        let field = UITextField()
+        field.placeholder = "email"
+        field.clearButtonMode = UITextFieldViewMode.whileEditing;
+        field.autocorrectionType = UITextAutocorrectionType.no
+        field.translatesAutoresizingMaskIntoConstraints = false
+        return field
+    }()
+    
+    let passwordTextField: UITextField = {
+        let field = UITextField()
+        field.placeholder = "password"
+        field.clearButtonMode = UITextFieldViewMode.whileEditing;
+        field.autocorrectionType = UITextAutocorrectionType.no
+        field.isSecureTextEntry = true
+        field.translatesAutoresizingMaskIntoConstraints = false
+        return field
+    }()
+    
+    let emailSeperator: UIView = {
+        let line = UIView()
+        line.backgroundColor = UIColor.lightGray
+        line.translatesAutoresizingMaskIntoConstraints = false
+        return line
+    }()
+    
+    let passwordSeperator: UIView = {
+        let line = UIView()
+        line.backgroundColor = UIColor.lightGray
+        line.translatesAutoresizingMaskIntoConstraints = false
+        return line
+    }()
+    
+    // MARK: - INITIAL STARTUP SETUP
     override func viewDidLoad() {
         super.viewDidLoad()
-        if #available(iOS 11.0, *) {
-            let window = UIApplication.shared.keyWindow
-            topPadding = window?.safeAreaInsets.top
-            bottomPadding = window?.safeAreaInsets.bottom
-        }
-        
         setUpView()
+        setUpLoginContainer()
+        setUpFonts()
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        UIView.animate(withDuration: 0.7, delay: 0.5, usingSpringWithDamping: 0.7, initialSpringVelocity: 0.7, options: .curveEaseIn, animations: {
+            self.logoImage.alpha = 1
+        }) { (_) in
+            UIView.animate(withDuration: 0.3, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 0.7, options: .curveEaseIn, animations: {
+                self.loginButton.alpha = 1
+                self.registerButton.alpha = 1
+            }, completion: nil)
+        }
+    }
+    
+    // MARK: - FIREBASE METHODS
+    @objc func handleLogin() {
+        print("login")
+    }
+    
+    // MARK: - ANIMATIONS AND SETUP
     func setUpView() {
         view.backgroundColor = UIColor.white
         
         view.addSubview(logoImage)
         logoImage.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        logoImage.topAnchor.constraint(equalTo: view.topAnchor, constant: 150).isActive = true
+        logoImage.topAnchor.constraint(equalTo: view.topAnchor, constant: 120).isActive = true
+        logoImage.alpha = 0
         
         view.addSubview(loginButton)
-        loginButton.leftAnchor.constraint(equalTo: view.centerXAnchor, constant: loginButton.frame.width + 12).isActive = true
-        loginButton.topAnchor.constraint(equalTo: view.bottomAnchor, constant: -250).isActive = true
-        loginButton.heightAnchor.constraint(equalToConstant: 130).isActive = true
-        loginButton.widthAnchor.constraint(equalToConstant: 130).isActive = true
+        loginButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        loginButton.topAnchor.constraint(equalTo: view.bottomAnchor, constant: -180).isActive = true
+        loginButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        loginButton.widthAnchor.constraint(equalToConstant: 250).isActive = true
         loginButton.addTarget(self, action: #selector(presentLogin), for: .touchUpInside)
+        loginButton.alpha = 0
         
         view.addSubview(registerButton)
-        registerButton.rightAnchor.constraint(equalTo: view.centerXAnchor, constant: -registerButton.frame.width - 12).isActive = true
-        registerButton.topAnchor.constraint(equalTo: view.bottomAnchor, constant: -250).isActive = true
-        registerButton.heightAnchor.constraint(equalToConstant: 130).isActive = true
-        registerButton.widthAnchor.constraint(equalToConstant: 130).isActive = true
+        registerButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        registerButton.topAnchor.constraint(equalTo: view.bottomAnchor, constant: -110).isActive = true
+        registerButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        registerButton.widthAnchor.constraint(equalToConstant: 250).isActive = true
         registerButton.addTarget(self, action: #selector(presentRegister), for: .touchUpInside)
+        registerButton.alpha = 0
         
-        UIView.animate(withDuration: 1.25, delay: 0.5, options: .curveEaseInOut, animations: {
-            self.logoImage.alpha = 1
-        }) { (_) in
-            UIView.animate(withDuration: 0.5, delay: 0, options: .curveEaseOut, animations: {
-                self.loginButton.alpha = 1
-                self.registerButton.alpha = 1
-            })
+        view.addSubview(closeButton)
+        closeButton.topAnchor.constraint(equalTo: loginButton.bottomAnchor, constant: 8).isActive = true
+        closeButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        closeButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        closeButton.widthAnchor.constraint(equalToConstant: 40).isActive = true
+        closeButton.addTarget(self, action: #selector(dismissLogin), for: .touchUpInside)
+        closeButton.alpha = 0
+        
+    }
+    
+    func setUpLoginContainer() {
+        view.addSubview(emailTextField)
+        emailTextField.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        emailTextField.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
+        emailTextField.widthAnchor.constraint(equalToConstant: 240).isActive = true
+        emailTextField.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        emailTextField.alpha = 0
+        
+        view.addSubview(emailSeperator)
+        emailSeperator.centerXAnchor.constraint(equalTo: emailTextField.centerXAnchor).isActive = true
+        emailSeperator.topAnchor.constraint(equalTo: emailTextField.bottomAnchor).isActive = true
+        emailSeperator.widthAnchor.constraint(equalToConstant: 250).isActive = true
+        emailSeperator.heightAnchor.constraint(equalToConstant: 3).isActive = true
+        emailSeperator.alpha = 0
+        
+        view.addSubview(passwordTextField)
+        passwordTextField.centerXAnchor.constraint(equalTo: emailTextField.centerXAnchor).isActive = true
+        passwordTextField.topAnchor.constraint(equalTo: emailSeperator.bottomAnchor, constant: 12).isActive = true
+        passwordTextField.widthAnchor.constraint(equalTo: emailTextField.widthAnchor, constant: 0).isActive = true
+        passwordTextField.heightAnchor.constraint(equalTo: emailTextField.heightAnchor, constant: 0).isActive = true
+        passwordTextField.alpha = 0
+        
+        view.addSubview(passwordSeperator)
+        passwordSeperator.centerXAnchor.constraint(equalTo: passwordTextField.centerXAnchor).isActive = true
+        passwordSeperator.topAnchor.constraint(equalTo: passwordTextField.bottomAnchor).isActive = true
+        passwordSeperator.widthAnchor.constraint(equalToConstant: 250).isActive = true
+        passwordSeperator.heightAnchor.constraint(equalToConstant: 3).isActive = true
+        passwordSeperator.alpha = 0
+    }
+    
+    func setUpFonts() {
+        if let avenir = UIFont (name: "AvenirNext-Regular", size: 24.0) {
+            loginButton.titleLabel?.font = avenir
+            registerButton.titleLabel?.font = avenir
+            emailTextField.font = avenir
+            passwordTextField.font = avenir
         }
     }
     
     @objc func presentLogin() {
-        let loginDest = self.view.frame.height - 100 - bottomPadding
-        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0.8, options: .curveEaseInOut, animations: {
-            self.logoImage.center.y = (self.logoImage.frame.height / 2) + 60
-            self.loginButton.frame.size = CGSize(width: 250, height: 50)
-            self.loginButton.layer.cornerRadius = 25
-            self.loginButton.center.x = self.view.center.x
-            self.loginButton.center.y = loginDest
+        UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseInOut, animations: {
             self.registerButton.alpha = 0
-            
-        })
+        }) { (_) in
+            UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseInOut, animations: {
+                self.closeButton.alpha = 1
+                self.emailTextField.alpha = 1
+                self.emailSeperator.alpha = 1
+                self.passwordTextField.alpha = 1
+                self.passwordSeperator.alpha = 1
+            }, completion: nil)
+        }
         loginButton.removeTarget(nil, action: nil, for: .allEvents)
-        loginButton.addTarget(self, action: #selector(dismissLogin), for: .touchUpInside)
-    }
-    
-    @objc func handleLogin() {
-        
-    }
-    
-    @objc func dismissLogin() {
-        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0.8, options: .curveEaseInOut, animations: {
-            self.logoImage.center.y = (self.logoImage.frame.height / 2) + 120
-            self.loginButton.frame.size = CGSize(width: 130, height: 130)
-            self.loginButton.layer.cornerRadius = 65
-            self.loginButton.center.x = self.view.center.x + (self.loginButton.frame.width / 2) + 12
-            self.loginButton.center.y = self.registerButton.center.y
-            self.registerButton.alpha = 1
-        })
-        loginButton.removeTarget(nil, action: nil, for: .allEvents)
-        loginButton.addTarget(self, action: #selector(presentLogin), for: .touchUpInside)
+        loginButton.addTarget(self, action: #selector(handleLogin), for: .touchUpInside)
     }
     
     @objc func presentRegister() {
-        let registerDest = self.view.frame.height - 75 - bottomPadding
-        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 0.7, options: .curveEaseInOut, animations: {
-            self.logoImage.center.y = (self.logoImage.frame.height / 2) + 60
-            self.registerButton.frame.size = CGSize(width: 250, height: 50)
-            self.registerButton.layer.cornerRadius = 25
-            self.registerButton.center.x = self.view.center.x
-            self.registerButton.center.y = registerDest
-            self.loginButton.alpha = 0
-        })
-        registerButton.removeTarget(nil, action: nil, for: .allEvents)
-        registerButton.addTarget(self, action: #selector(dismissRegister), for: .touchUpInside)
+        let registerVC = RegisterViewController()
+        present(registerVC, animated: true, completion: nil)
     }
     
-    @objc func handleRegister() {
-        
-    }
-    
-    @objc func dismissRegister() {
-        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 0.7, options: .curveEaseInOut, animations: {
-            self.logoImage.center.y = (self.logoImage.frame.height / 2) + 120
-            self.registerButton.frame.size = CGSize(width: 130, height: 130)
-            self.registerButton.layer.cornerRadius = 65
-            self.registerButton.center.x = self.view.center.x - (self.registerButton.frame.width / 2) - 12
-            self.registerButton.center.y = self.loginButton.center.y
-            self.loginButton.alpha = 1
-        })
-        registerButton.removeTarget(nil, action: nil, for: .allEvents)
-        registerButton.addTarget(self, action: #selector(presentRegister), for: .touchUpInside)
+    @objc func dismissLogin() {
+        UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseInOut, animations: {
+            self.closeButton.alpha = 0
+            self.emailTextField.alpha = 0
+            self.emailSeperator.alpha = 0
+            self.passwordTextField.alpha = 0
+            self.passwordSeperator.alpha = 0
+        }) { (_) in
+            self.emailTextField.text = ""
+            self.passwordTextField.text = ""
+            UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseInOut, animations: {
+                self.registerButton.alpha = 1
+            }, completion: nil)
+        }
+        loginButton.removeTarget(nil, action: nil, for: .allEvents)
+        loginButton.addTarget(self, action: #selector(presentLogin), for: .touchUpInside)
     }
     
 }
