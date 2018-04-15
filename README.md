@@ -2,7 +2,7 @@
 
 Sample login-register page with animations
 
-![Animation](https://media.giphy.com/media/TFiyU2WjqPVKEKsklr/giphy.gif)
+![Animation](https://media.giphy.com/media/5nd8MAENT1ifDi6lev/giphy.gif)
 
 
 
